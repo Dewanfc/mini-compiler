@@ -69,5 +69,43 @@ typedef enum
 
 } NodeType;
 
+typedef struct ASTNode
+{
 
+    NodeType type;
+
+
+    /*
+        Stores:
+        variable name
+        operator symbol
+        function name
+        array name
+    */
+
+    char *name;
+
+
+
+    /*
+        Constant values
+    */
+
+    int int_val;
+
+    float float_val;
+
+    int bool_val;
+
+
+
+
+    /*
+        Tree connections
+    */
+
+
+    struct ASTNode *left;
+
+    struct ASTNode *right;
 
