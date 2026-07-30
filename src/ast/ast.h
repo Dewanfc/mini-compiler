@@ -188,3 +188,18 @@ ASTNode* create_bool_const(int value);
 /*
     Expressions
 */
+
+ASTNode* create_binop(char *op,
+                      ASTNode *left,
+                      ASTNode *right);
+
+
+
+ASTNode* create_unary(char *op,
+                      ASTNode *child);
+
+
+
+/*
+    Variables
+*/
