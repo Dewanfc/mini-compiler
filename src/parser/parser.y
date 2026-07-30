@@ -102,3 +102,77 @@ program:
     }
 
 ;
+
+
+statements:
+
+
+      statements statement
+      {
+
+          ASTNode *temp=$1;
+
+
+          if(temp!=NULL)
+          {
+              while(temp->next!=NULL)
+                  temp=temp->next;
+
+
+              temp->next=$2;
+
+
+              $$=$1;
+          }
+
+          else
+          {
+              $$=$2;
+          }
+
+      }
+
+
+
+    | statement
+      {
+          $$=$1;
+      }
+
+;
+
+
+
+statement:
+
+
+      declaration
+
+    | assignment
+
+    | print_statement
+
+    | if_statement
+
+    | while_statement
+
+    | block
+
+
+
+    /* Error recovery */
+
+    | error SEMI
+      {
+          printf("Recovered from syntax error at line %d\n",
+                 line_num);
+
+          yyerrok;
+
+          $$=NULL;
+      }
+
+;
+
+
+
