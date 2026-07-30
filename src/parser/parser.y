@@ -177,3 +177,79 @@ ASTNode *root = NULL;
 
 %%
 
+program:
+
+    statements
+    {
+        root=$1;
+    }
+
+;
+
+
+
+
+statements:
+
+
+    statements statement
+    {
+
+        ASTNode *temp=$1;
+
+
+        while(temp->next)
+            temp=temp->next;
+
+
+        temp->next=$2;
+
+
+        $$=$1;
+
+    }
+
+
+
+    |
+
+    statement
+    {
+        $$=$1;
+    }
+
+;
+
+
+
+
+
+statement:
+
+
+      declaration
+
+    | assignment
+
+    | print_statement
+
+    | if_statement
+
+    | while_statement
+
+    | for_statement
+
+    | do_statement
+
+    | function
+
+    | return_statement
+
+    | switch_statement
+
+    | block
+
+;
+
+
+
