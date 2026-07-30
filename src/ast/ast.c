@@ -307,3 +307,12 @@ ASTNode* create_node(NodeType type)
 
     return node;
 }
+
+ASTNode* create_identifier(char *name)
+{
+    ASTNode *node = create_node(NODE_IDENTIFIER);
+
+    node->name = strdup(name);
+
+    return node;
+}
