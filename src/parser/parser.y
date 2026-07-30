@@ -286,3 +286,39 @@ LBRACE RBRACE
 
 ;
 
+
+
+/* ======================
+        DECLARATION
+   ====================== */
+
+
+declaration:
+
+
+INT IDENTIFIER SEMI
+
+{
+
+    $$=create_var_decl($2);
+
+}
+
+
+
+|
+
+INT IDENTIFIER LBRACKET INT_VAL RBRACKET SEMI
+
+{
+
+    $$=create_array_decl($2,$4);
+
+}
+
+;
+
+
+
+
+
