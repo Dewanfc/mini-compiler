@@ -1,9 +1,9 @@
 {
-    int x;
-    x = 5;
+int x;
+x = 10;
 
-    while(x)
-    {
-        print x;
-    }
+if(x > 5 && x < 20)
+{
+    print x;
+}
 }
