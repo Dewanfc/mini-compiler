@@ -541,3 +541,20 @@ ASTNode* create_if_else(ASTNode *condition,
 
     return node;
 }
+
+ASTNode* create_while(ASTNode *condition,
+                      ASTNode *body)
+{
+
+    ASTNode *node =
+        create_node(NODE_WHILE);
+
+
+    node->left = condition;
+
+    node->right = body;
+
+
+    return node;
+}
+
