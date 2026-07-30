@@ -1,15 +1,18 @@
 CC = gcc
-CFLAGS = -Wall -g -Isrc -Isrc/ast -Isrc/symbol_table -Isrc/semantic
+
+CFLAGS = -Wall -g -Isrc -Isrc/ast -Isrc/symbol_table -Isrc/semantic -Isrc/visualization -Isrc/optimization
 
 BISON = win_bison
-FLEX  = win_flex
+FLEX = win_flex
 
 OBJS = parser.tab.o \
        lex.yy.o \
        main.o \
        ast.o \
        symtab.o \
-       tac.o
+       tac.o \
+       ast_graphviz.o \
+       optimizer.o
 
 all: compiler.exe
 
@@ -39,6 +42,12 @@ symtab.o: src/symbol_table/symtab.c
 
 tac.o: src/semantic/tac.c
 	$(CC) $(CFLAGS) -c src/semantic/tac.c -o tac.o
+
+ast_graphviz.o: src/visualization/ast_graphviz.c
+	$(CC) $(CFLAGS) -c src/visualization/ast_graphviz.c -o ast_graphviz.o
+
+optimizer.o: src/optimization/optimizer.c
+	$(CC) $(CFLAGS) -c src/optimization/optimizer.c -o optimizer.o
 
 clean:
 	-rm -f compiler.exe *.exe *.o parser.tab.c parser.tab.h lex.yy.c
