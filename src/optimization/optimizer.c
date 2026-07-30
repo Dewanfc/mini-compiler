@@ -56,5 +56,4 @@ ASTNode* remove_dead_code(ASTNode *node)
 
     return node;
 
-}git add .
-git commit -m "new commit"
+}
