@@ -131,3 +131,37 @@ typedef struct ASTNode
         - arguments
         - cases
     */
+
+     struct ASTNode *next;
+
+
+
+    /*
+        Array size
+
+        Example:
+
+        int arr[10]
+
+        size = 10
+    */
+
+    int array_size;
+
+
+
+    /*
+        Function information
+    */
+
+
+    char *return_type;
+
+
+} ASTNode;
+
+
+
+/*
+    Basic constructors
+*/
