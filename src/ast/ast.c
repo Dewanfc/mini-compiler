@@ -316,3 +316,13 @@ ASTNode* create_identifier(char *name)
 
     return node;
 }
+
+
+ASTNode* create_int_const(int value)
+{
+    ASTNode *node = create_node(NODE_INT_CONST);
+
+    node->int_val = value;
+
+    return node;
+}
