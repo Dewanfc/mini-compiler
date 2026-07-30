@@ -54,3 +54,20 @@ ASTNode *root = NULL;
 
 %token SEMI
 
+%type <node> program
+%type <node> statements
+%type <node> statement
+
+%type <node> block
+
+%type <node> declaration
+
+%type <node> assignment
+
+%type <node> print_statement
+
+%type <node> if_statement
+
+%type <node> while_statement
+
+%type <node> expression
