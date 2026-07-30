@@ -558,3 +558,25 @@ ASTNode* create_while(ASTNode *condition,
     return node;
 }
 
+
+ASTNode* create_for(ASTNode *init,
+                    ASTNode *condition,
+                    ASTNode *update,
+                    ASTNode *body)
+{
+
+    ASTNode *node =
+        create_node(NODE_FOR);
+
+
+    node->left = init;
+
+    node->right = condition;
+
+    node->third = update;
+
+    node->next = body;
+
+
+    return node;
+}
