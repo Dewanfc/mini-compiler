@@ -372,3 +372,21 @@ ASTNode* create_binop(char *op,
 
     return node;
 }
+
+
+
+ASTNode* create_unary(char *op,
+                      ASTNode *child)
+{
+
+    ASTNode *node = create_node(NODE_UNARY);
+
+
+    node->name = strdup(op);
+
+    node->left = child;
+
+
+    return node;
+}
+
