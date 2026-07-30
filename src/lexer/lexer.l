@@ -149,3 +149,76 @@ WHITESPACE  [ \t\r]+
 "||"            { return OR; }
 
 "!"             { return NOT; }
+
+
+
+/* ===========================
+        BRACKETS
+   =========================== */
+
+
+"{"             { return LBRACE; }
+
+"}"             { return RBRACE; }
+
+
+
+"("             { return LPAREN; }
+
+")"             { return RPAREN; }
+
+
+
+"["             { return LBRACKET; }
+
+"]"             { return RBRACKET; }
+
+
+
+";"             { return SEMI; }
+
+","             { return COMMA; }
+
+
+
+":"             { return COLON; }
+
+
+
+
+
+
+/* ===========================
+        VALUES
+   =========================== */
+
+
+{FLOAT_CONST}
+{
+    yylval.float_val = atof(yytext);
+
+    return FLOAT_VAL;
+}
+
+
+
+{INT_CONST}
+{
+    yylval.int_val = atoi(yytext);
+
+    return INT_VAL;
+}
+
+
+
+{ID}
+{
+    yylval.str_val = strdup(yytext);
+
+    return IDENTIFIER;
+}
+
+
+
+
+
