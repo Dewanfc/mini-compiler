@@ -762,3 +762,15 @@ ASTNode* create_increment(ASTNode *id)
 }
 
 
+ASTNode* create_decrement(ASTNode *id)
+{
+
+    ASTNode *node =
+        create_node(NODE_DECREMENT);
+
+
+    node->left = id;
+
+
+    return node;
+}
