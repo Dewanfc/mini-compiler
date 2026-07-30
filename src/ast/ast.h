@@ -6,3 +6,68 @@
 #include <string.h>
 
 
+typedef enum
+{
+
+    /* Basic nodes */
+    NODE_PROGRAM,
+    NODE_BLOCK,
+
+    NODE_VAR_DECL,
+    NODE_ARRAY_DECL,
+
+    NODE_ASSIGN,
+    NODE_ARRAY_ASSIGN,
+
+    NODE_IDENTIFIER,
+    NODE_ARRAY_ACCESS,
+
+
+    /* Constants */
+    NODE_INT_CONST,
+    NODE_FLOAT_CONST,
+    NODE_BOOL_CONST,
+
+
+    /* Expressions */
+    NODE_BINOP,
+    NODE_UNARY,
+
+
+    /* Statements */
+    NODE_PRINT,
+
+    NODE_IF,
+    NODE_IF_ELSE,
+
+    NODE_WHILE,
+    NODE_FOR,
+    NODE_DO_WHILE,
+
+
+    /* Functions */
+    NODE_FUNCTION,
+    NODE_PARAM_LIST,
+    NODE_FUNCTION_CALL,
+    NODE_RETURN,
+
+
+    /* Switch */
+    NODE_SWITCH,
+    NODE_CASE,
+    NODE_DEFAULT,
+
+
+    /* Increment decrement */
+    NODE_INCREMENT,
+    NODE_DECREMENT,
+
+
+    /* Optimization */
+    NODE_EMPTY
+
+
+} NodeType;
+
+
+
