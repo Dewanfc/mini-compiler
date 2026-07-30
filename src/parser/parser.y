@@ -93,3 +93,12 @@ ASTNode *root = NULL;
 
 
 %%
+
+program:
+
+    statements
+    {
+        root = $1;
+    }
+
+;
