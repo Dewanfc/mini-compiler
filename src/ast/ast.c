@@ -390,3 +390,22 @@ ASTNode* create_unary(char *op,
     return node;
 }
 
+
+
+/*
+    Variables
+*/
+
+
+ASTNode* create_var_decl(char *name)
+{
+
+    ASTNode *node = create_node(NODE_VAR_DECL);
+
+
+    node->name = strdup(name);
+
+
+    return node;
+}
+
