@@ -1,110 +1,92 @@
 %{
+
 #include "parser.tab.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+
 int line_num = 1;
+
+
 %}
 
+
+
 %option noyywrap
+
 %option nounput
+
 %option noinput
 
 
-DIGIT          [0-9]
-LETTER         [a-zA-Z_]
 
-ID             {LETTER}({LETTER}|{DIGIT})*
-INT_CONST      {DIGIT}+
-FLOAT_CONST    {DIGIT}+"."{DIGIT}+
+DIGIT       [0-9]
+
+LETTER      [a-zA-Z_]
+
+ID          {LETTER}({LETTER}|{DIGIT})*
+
+INT_CONST   {DIGIT}+
+
+FLOAT_CONST {DIGIT}+"."{DIGIT}+
+
+
+WHITESPACE  [ \t\r]+
+
 
 
 %%
 
 
-int                 { return INT; }
-float               { return FLOAT; }
-bool                { return BOOL; }
 
-if                  { return IF; }
-else                { return ELSE; }
-while               { return WHILE; }
-print               { return PRINT; }
-
-true                { return TRUE_CONST; }
-false               { return FALSE_CONST; }
+/* ===========================
+        KEYWORDS
+   =========================== */
 
 
+"int"           { return INT; }
 
-"+"                 { return PLUS; }
-"-"                 { return MINUS; }
-"*"                 { return MULT; }
-"/"                 { return DIV; }
-"%"                 { return MOD; }
+"float"         { return FLOAT; }
 
-"="                 { return ASSIGN; }
+"bool"          { return BOOL; }
 
 
-"<="                { return LE; }
-">="                { return GE; }
-"=="                { return EQ; }
-"!="                { return NEQ; }
+"if"            { return IF; }
 
-"<"                 { return LT; }
-">"                 { return GT; }
+"else"          { return ELSE; }
 
-"&&"                { return AND; }
-"||"                { return OR; }
-"!"                 { return NOT; }
+
+"while"         { return WHILE; }
+
+"for"           { return FOR; }
+
+"do"            { return DO; }
 
 
 
-"{"                 { return LBRACE; }
-"}"                 { return RBRACE; }
+"switch"        { return SWITCH; }
 
-"("                 { return LPAREN; }
-")"                 { return RPAREN; }
+"case"          { return CASE; }
 
-";"                 { return SEMI; }
+"default"       { return DEFAULT; }
 
 
 
-{FLOAT_CONST} {
-    yylval.float_val = atof(yytext);
-    return FLOAT_VAL;
-}
-
-{INT_CONST} {
-    yylval.int_val = atoi(yytext);
-    return INT_VAL;
-}
-
-{ID} {
-    yylval.str_val = strdup(yytext);
-    return IDENTIFIER;
-}
+"return"        { return RETURN; }
 
 
-[ \t\r]+ {
-}
+"print"         { return PRINT; }
 
 
-\n {
-    line_num++;
-}
+"true"          { 
+                    yylval.bool_val = 1;
+                    return TRUE_CONST;
+                }
 
 
-"//".* {
-}
-
-
-. {
-    fprintf(stderr,
-            "Lexical Error at line %d: %s\n",
-            line_num,
-            yytext);
-}
-
-
-%%
+"false"         { 
+                    yylval.bool_val = 0;
+                    return FALSE_CONST;
+                }
