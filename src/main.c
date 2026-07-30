@@ -1,78 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "ast.h"
 
-#include "ast/ast.h"
-#include "symbol_table/symtab.h"
+extern FILE* yyin;
+extern int yyparse();
+extern ASTNode* ast_root;
 
-/* Bison/Flex */
-extern int yyparse(void);
-extern FILE *yyin;
-extern int line_num;
+ASTNode* optimize_ast(ASTNode* node);
+char* generate_tac(ASTNode* node);
+void generate_dot(ASTNode* root, const char* filename);
 
-/* AST root created by parser.y */
-extern ASTNode *root;
-
-/* TAC generator */
-extern char *generate_tac(ASTNode *node);
-
-/* Optimizer */
-extern ASTNode *remove_dead_code(ASTNode *node);
-
-/* Graphviz */
-extern void create_ast_graph(ASTNode *root);
-
-int main(int argc, char *argv[])
-{
-    if (argc > 1)
-    {
+int main(int argc, char** argv) {
+    if (argc > 1) {
         yyin = fopen(argv[1], "r");
-
-        if (yyin == NULL)
-        {
-            fprintf(stderr,
-                    "Error: Could not open file '%s'\n",
-                    argv[1]);
-            return EXIT_FAILURE;
+        if (!yyin) {
+            fprintf(stderr, "Cannot open file %s\n", argv[1]);
+            return 1;
         }
+    } else {
+        yyin = stdin;
     }
 
-    printf("========== Compiler Started ==========\n");
+    printf("Starting compilation...\n");
+    
+    if (yyparse() == 0) {
+        printf("Syntax Analysis: PASSED\n\n");
 
-    /* Initialize Symbol Table */
-    enter_scope();
+        if (ast_root) {
+            printf("Optimizing AST...\n");
+            ast_root = optimize_ast(ast_root);
 
-    /* Parse */
-    if (yyparse() == 0)
-    {
-        printf("Syntax Analysis: PASSED\n");
+            printf("Generating AST visualization...\n");
+            generate_dot(ast_root, "ast.dot");
+            system("dot -Tpng ast.dot -o ast.png");
 
-        if (root != NULL)
-        {
-            /* Optimization */
-            root = remove_dead_code(root);
-
-            /* Generate AST Graph */
-            create_ast_graph(root);
-
-            printf("Generating Three Address Code (TAC)...\n");
-
-            /* Generate TAC */
-            generate_tac(root);
+            printf("\nGenerating Three Address Code (TAC)...\n");
+            generate_tac(ast_root);
         }
-        else
-        {
-            printf("No AST generated.\n");
-        }
-    }
-    else
-    {
+    } else {
         printf("Syntax Analysis: FAILED\n");
     }
 
-    exit_scope();
-
-    if (yyin != NULL)
+    if (yyin && yyin != stdin) {
         fclose(yyin);
-
-    return EXIT_SUCCESS;
+    }
+    
+    return 0;
 }

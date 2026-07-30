@@ -1,851 +1,215 @@
 %{
-
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "src/ast/ast.h"
-
+#include "ast.h"
 
 extern int yylex();
-
 extern int line_num;
-
-
+extern char* yytext;
 void yyerror(const char *s);
 
-
-
-ASTNode *root = NULL;
-
-
+ASTNode* ast_root = NULL;
 %}
 
-
-
-%union
-{
-
-    int int_val;
-
-    float float_val;
-
-    int bool_val;
-
-    char *str_val;
-
-
-    ASTNode *node;
-
+%code requires {
+    #include <stdbool.h>
+    #include "ast.h"
 }
 
-
-
-
-/* ======================
-        TOKENS
-   ====================== */
-
+%union {
+    int int_val;
+    float float_val;
+    bool bool_val;
+    char* str_val;
+    ASTNode* node;
+}
 
 %token <int_val> INT_VAL
-
 %token <float_val> FLOAT_VAL
-
 %token <bool_val> TRUE_CONST FALSE_CONST
-
-
 %token <str_val> IDENTIFIER
 
-
-
-
 %token INT FLOAT BOOL
+%token IF ELSE WHILE FOR DO SWITCH CASE DEFAULT RETURN PRINT
 
+%token INC DEC EQ NEQ LE GE AND OR PLUS MINUS MULT DIV MOD ASSIGN LT GT NOT
 
-%token IF ELSE
+%token LBRACE RBRACE LPAREN RPAREN LBRACKET RBRACKET SEMI COMMA COLON
 
-%token WHILE FOR DO
+%type <node> program stmt_list stmt block
+%type <node> var_decl array_decl expr assign_stmt
+%type <node> if_stmt while_stmt do_while_stmt for_stmt switch_stmt
+%type <node> case_list case_stmt default_stmt
+%type <node> func_decl func_call arg_list param_list param
+%type <str_val> type
 
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
 
-%token SWITCH CASE DEFAULT
-
-
-%token RETURN
-
-
-%token PRINT
-
-
-
-
-%token PLUS MINUS MULT DIV MOD
-
-%token ASSIGN
-
-
-%token LT GT LE GE EQ NEQ
-
-%token AND OR NOT
-
-
-%token INC DEC
-
-
-
-%token LBRACE RBRACE
-
-%token LPAREN RPAREN
-
-
-%token LBRACKET RBRACKET
-
-
-%token SEMI COMMA COLON
-
-
-
-
-
-/* ======================
-        TYPES
-   ====================== */
-
-
-%type <node> program
-
-%type <node> statements
-
-%type <node> statement
-
-%type <node> expression
-
-%type <node> block
-
-%type <node> declaration
-
-%type <node> assignment
-
-
-%type <node> if_statement
-
-%type <node> while_statement
-
-%type <node> for_statement
-
-%type <node> do_statement
-
-
-%type <node> print_statement
-
-
-%type <node> function
-
-%type <node> function_call
-
-%type <node> return_statement
-
-
-%type <node> array_access
-
-%type <node> switch_statement
-
-
-
-
-/* ======================
-    PRECEDENCE
-   ====================== */
-
-
+%right ASSIGN
 %left OR
-
 %left AND
-
-
 %left EQ NEQ
-
 %left LT GT LE GE
-
-
 %left PLUS MINUS
-
 %left MULT DIV MOD
-
-
 %right NOT
-
-%right UMINUS
-
-
-
+%right INC DEC
 
 %%
-
-
 
 program:
+    stmt_list { ast_root = $1; }
+    ;
 
-    statements
-    {
-        root=$1;
-    }
+stmt_list:
+    stmt stmt_list { $$ = create_seq($1, $2); }
+    |              { $$ = NULL; }
+    ;
 
-;
-
-
-
-
-statements:
-
-
-    statements statement
-    {
-
-        ASTNode *temp=$1;
-
-
-        while(temp->next)
-            temp=temp->next;
-
-
-        temp->next=$2;
-
-
-        $$=$1;
-
-    }
-
-
-
-    |
-
-    statement
-    {
-        $$=$1;
-    }
-
-;
-
-
-
-
-
-statement:
-
-
-      declaration
-
-    | assignment
-
-    | print_statement
-
-    | if_statement
-
-    | while_statement
-
-    | for_statement
-
-    | do_statement
-
-    | function
-
-    | return_statement
-
-    | switch_statement
-
-    | block
-
-;
-
-
-
-
-
-
-
-/* ======================
-        BLOCK
-   ====================== */
-
+stmt:
+    var_decl SEMI            { $$ = $1; }
+    | array_decl SEMI        { $$ = $1; }
+    | assign_stmt SEMI       { $$ = $1; }
+    | if_stmt                { $$ = $1; }
+    | while_stmt             { $$ = $1; }
+    | do_while_stmt          { $$ = $1; }
+    | for_stmt               { $$ = $1; }
+    | switch_stmt            { $$ = $1; }
+    | func_decl              { $$ = $1; }
+    | func_call SEMI         { $$ = $1; }
+    | RETURN expr SEMI       { $$ = create_return($2); }
+    | PRINT expr SEMI        { $$ = create_print($2); }
+    | block                  { $$ = $1; }
+    | expr SEMI              { $$ = $1; }
+    ;
 
 block:
-
-
-LBRACE statements RBRACE
-
-{
-
-    $$=create_node(NODE_BLOCK);
-
-    $$->left=$2;
-
-}
-
-
-|
-
-LBRACE RBRACE
-
-{
-
-    $$=create_node(NODE_BLOCK);
-
-}
-
-;
-
-
-
-
-
-
-
-/* ======================
-        DECLARATION
-   ====================== */
-
-
-declaration:
-
-
-INT IDENTIFIER SEMI
-
-{
-
-    $$=create_var_decl($2);
-
-}
-
-
-
-|
-
-INT IDENTIFIER LBRACKET INT_VAL RBRACKET SEMI
-
-{
-
-    $$=create_array_decl($2,$4);
-
-}
-
-;
-
-
-
-
-
-
-
-
-
-/* ======================
-        ASSIGNMENT
-   ====================== */
-
-
-assignment:
-
-
-IDENTIFIER ASSIGN expression SEMI
-
-{
-
-    $$=create_assign(
-        create_identifier($1),
-        $3
-    );
-
-}
-
-
-
-|
-
-IDENTIFIER LBRACKET expression RBRACKET ASSIGN expression SEMI
-
-{
-
-    $$=create_array_assign(
-        $1,
-        $3,
-        $6
-    );
-
-}
-
-
-;
-
-
-
-
-
-
-
-
-
-/* ======================
-        PRINT
-   ====================== */
-
-
-print_statement:
-
-
-PRINT expression SEMI
-
-{
-
-    $$=create_print($2);
-
-}
-
-;
-
-
-
-
-
-
-
-
-
-/* ======================
-        IF
-   ====================== */
-
-
-if_statement:
-
-
-IF LPAREN expression RPAREN block
-
-
-{
-
-    $$=create_if($3,$5);
-
-}
-
-
-
-|
-
-IF LPAREN expression RPAREN block ELSE block
-
-
-{
-
-    $$=create_if_else(
-        $3,
-        $5,
-        $7
-    );
-
-}
-
-;
-
-
-
-
-
-
-
-
-/* ======================
-        WHILE
-   ====================== */
-
-
-while_statement:
-
-
-WHILE LPAREN expression RPAREN block
-
-{
-
-    $$=create_while(
-        $3,
-        $5
-    );
-
-}
-
-;
-
-
-
-
-
-
-
-
-/* ======================
-        FOR
-   ====================== */
-
-
-for_statement:
-
-
-FOR LPAREN assignment expression SEMI expression RPAREN block
-
-{
-
-    $$=create_for(
-        $3,
-        $4,
-        $6,
-        $8
-    );
-
-}
-
-;
-
-
-
-
-
-
-
-/* ======================
-        DO WHILE
-   ====================== */
-
-
-do_statement:
-
-
-DO block WHILE LPAREN expression RPAREN SEMI
-
-{
-
-    $$=create_do_while(
-        $2,
-        $5
-    );
-
-}
-
-;
-
-
-
-
-
-
-
-
-/* ======================
-        FUNCTIONS
-   ====================== */
-
-
-function:
-
-
-INT IDENTIFIER LPAREN RPAREN block
-
-{
-
-    $$=create_function(
-        $2,
-        "int",
-        NULL,
-        $5
-    );
-
-}
-
-;
-
-
-
-
-
-function_call:
-
-
-IDENTIFIER LPAREN RPAREN
-
-{
-
-    $$=create_function_call(
-        $1,
-        NULL
-    );
-
-}
-
-;
-
-
-
-
-
-
-
-return_statement:
-
-
-RETURN expression SEMI
-
-{
-
-    $$=create_return($2);
-
-}
-
-;
-
-
-
-
-
-
-
-
-
-/* ======================
-        SWITCH
-   ====================== */
-
-
-switch_statement:
-
-
-SWITCH LPAREN expression RPAREN block
-
-{
-
-    $$=create_switch(
-        $3,
-        $5
-    );
-
-}
-
-;
-
-
-
-
-
-
-
-
-
-
-/* ======================
-        EXPRESSIONS
-   ====================== */
-
-
-expression:
-
-
-expression PLUS expression
-
-{
-
-    $$=create_binop("+",$1,$3);
-
-}
-
-
-
-|
-
-expression MINUS expression
-
-{
-
-    $$=create_binop("-",$1,$3);
-
-}
-
-
-
-|
-
-expression MULT expression
-
-{
-
-    $$=create_binop("*",$1,$3);
-
-}
-
-
-
-|
-
-expression DIV expression
-
-{
-
-    $$=create_binop("/",$1,$3);
-
-}
-
-
-
-|
-
-expression GT expression
-
-{
-
-    $$=create_binop(">",$1,$3);
-
-}
-
-
-
-|
-
-expression LT expression
-
-{
-
-    $$=create_binop("<",$1,$3);
-
-}
-
-
-
-|
-
-expression AND expression
-
-{
-
-    $$=create_binop("&&",$1,$3);
-
-}
-
-
-
-|
-
-expression OR expression
-
-{
-
-    $$=create_binop("||",$1,$3);
-
-}
-
-
-
-|
-
-MINUS expression %prec UMINUS
-
-{
-
-    $$=create_unary("-",$2);
-
-}
-
-
-
-|
-
-NOT expression
-
-{
-
-    $$=create_unary("!",$2);
-
-}
-
-
-
-|
-
-IDENTIFIER
-
-{
-
-    $$=create_identifier($1);
-
-}
-
-
-
-|
-
-INT_VAL
-
-{
-
-    $$=create_int_const($1);
-
-}
-
-
-
-|
-
-array_access
-
-
-{
-
-    $$=$1;
-
-}
-
-
-
-|
-
-function_call
-
-{
-
-    $$=$1;
-
-}
-
-
-
-;
-
-
-
-array_access:
-
-
-IDENTIFIER LBRACKET expression RBRACKET
-
-{
-
-    $$=create_array_access(
-        $1,
-        $3
-    );
-
-}
-
-;
-
-
-
+    LBRACE stmt_list RBRACE { $$ = $2; }
+    ;
+
+type:
+    INT     { $$ = "int"; }
+    | FLOAT { $$ = "float"; }
+    | BOOL  { $$ = "bool"; }
+    ;
+
+var_decl:
+    type IDENTIFIER { $$ = create_var_decl($1, $2); free($2); }
+    ;
+
+array_decl:
+    type IDENTIFIER LBRACKET INT_VAL RBRACKET { $$ = create_array_decl($1, $2, create_int_const($4)); free($2); }
+    ;
+
+assign_stmt:
+    IDENTIFIER ASSIGN expr { 
+        $$ = create_assign(create_identifier($1), $3); 
+        free($1); 
+    }
+    | IDENTIFIER LBRACKET expr RBRACKET ASSIGN expr { 
+        $$ = create_assign(create_array_access($1, $3), $6); 
+        free($1); 
+    }
+    ;
+
+if_stmt:
+    IF LPAREN expr RPAREN block %prec LOWER_THAN_ELSE { $$ = create_if($3, $5); }
+    | IF LPAREN expr RPAREN block ELSE block          { $$ = create_if_else($3, $5, $7); }
+    ;
+
+while_stmt:
+    WHILE LPAREN expr RPAREN block { $$ = create_while($3, $5); }
+    ;
+
+do_while_stmt:
+    DO block WHILE LPAREN expr RPAREN SEMI { $$ = create_do_while($5, $2); }
+    ;
+
+for_stmt:
+    FOR LPAREN assign_stmt SEMI expr SEMI assign_stmt RPAREN block { $$ = create_for($3, $5, $7, $9); }
+    | FOR LPAREN assign_stmt SEMI expr SEMI expr RPAREN block      { $$ = create_for($3, $5, $7, $9); }
+    ;
+
+switch_stmt:
+    SWITCH LPAREN expr RPAREN LBRACE case_list RBRACE { $$ = create_switch($3, $6); }
+    ;
+
+case_list:
+    case_stmt case_list  { $$ = create_seq($1, $2); }
+    | default_stmt       { $$ = $1; }
+    |                    { $$ = NULL; }
+    ;
+
+case_stmt:
+    CASE INT_VAL COLON stmt_list { $$ = create_case(create_int_const($2), $4); }
+    ;
+
+default_stmt:
+    DEFAULT COLON stmt_list { $$ = create_default($3); }
+    ;
+
+func_decl:
+    type IDENTIFIER LPAREN param_list RPAREN block { $$ = create_function($1, $2, $4, $6); free($2); }
+    ;
+
+param_list:
+    param COMMA param_list { $$ = create_seq($1, $3); }
+    | param                { $$ = $1; }
+    |                      { $$ = NULL; }
+    ;
+
+param:
+    type IDENTIFIER { $$ = create_var_decl($1, $2); free($2); }
+    ;
+
+func_call:
+    IDENTIFIER LPAREN arg_list RPAREN { $$ = create_function_call($1, $3); free($1); }
+    ;
+
+arg_list:
+    expr COMMA arg_list { $$ = create_seq($1, $3); }
+    | expr              { $$ = $1; }
+    |                   { $$ = NULL; }
+    ;
+
+expr:
+    expr PLUS expr          { $$ = create_binop("+", $1, $3); }
+    | expr MINUS expr       { $$ = create_binop("-", $1, $3); }
+    | expr MULT expr        { $$ = create_binop("*", $1, $3); }
+    | expr DIV expr         { $$ = create_binop("/", $1, $3); }
+    | expr MOD expr         { $$ = create_binop("%", $1, $3); }
+    
+    | expr EQ expr          { $$ = create_binop("==", $1, $3); }
+    | expr NEQ expr         { $$ = create_binop("!=", $1, $3); }
+    | expr LT expr          { $$ = create_binop("<", $1, $3); }
+    | expr GT expr          { $$ = create_binop(">", $1, $3); }
+    | expr LE expr          { $$ = create_binop("<=", $1, $3); }
+    | expr GE expr          { $$ = create_binop(">=", $1, $3); }
+    
+    | expr AND expr         { $$ = create_binop("&&", $1, $3); }
+    | expr OR expr          { $$ = create_binop("||", $1, $3); }
+    
+    | NOT expr              { $$ = create_unary("!", $2); }
+    | MINUS expr %prec NOT  { $$ = create_unary("-", $2); }
+    
+    | IDENTIFIER INC        { $$ = create_unary("++", create_identifier($1)); free($1); }
+    | IDENTIFIER DEC        { $$ = create_unary("--", create_identifier($1)); free($1); }
+    
+    | LPAREN expr RPAREN    { $$ = $2; }
+    
+    | IDENTIFIER            { $$ = create_identifier($1); free($1); }
+    | IDENTIFIER LBRACKET expr RBRACKET { $$ = create_array_access($1, $3); free($1); }
+    
+    | INT_VAL               { $$ = create_int_const($1); }
+    | FLOAT_VAL             { $$ = create_float_const($1); }
+    | TRUE_CONST            { $$ = create_bool_const(1); }
+    | FALSE_CONST           { $$ = create_bool_const(0); }
+    | func_call             { $$ = $1; }
+    ;
 
 %%
 
-
-
-
-void yyerror(const char *s)
-{
-
-    fprintf(stderr,
-    "Syntax Error at line %d: %s\n",
-    line_num,
-    s);
-
+void yyerror(const char *s) {
+    fprintf(stderr, "Syntax Error at line %d: %s (near '%s')\n", line_num, s, yytext);
 }

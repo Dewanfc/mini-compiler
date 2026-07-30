@@ -39,6 +39,16 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+/* Line 2058 of yacc.c  */
+#line 14 "src/parser/parser.y"
+
+    #include <stdbool.h>
+    #include "ast.h"
+
+
+/* Line 2058 of yacc.c  */
+#line 52 "parser.tab.h"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -64,23 +74,23 @@ extern int yydebug;
      DEFAULT = 273,
      RETURN = 274,
      PRINT = 275,
-     PLUS = 276,
-     MINUS = 277,
-     MULT = 278,
-     DIV = 279,
-     MOD = 280,
-     ASSIGN = 281,
-     LT = 282,
-     GT = 283,
-     LE = 284,
-     GE = 285,
-     EQ = 286,
-     NEQ = 287,
-     AND = 288,
-     OR = 289,
-     NOT = 290,
-     INC = 291,
-     DEC = 292,
+     INC = 276,
+     DEC = 277,
+     EQ = 278,
+     NEQ = 279,
+     LE = 280,
+     GE = 281,
+     AND = 282,
+     OR = 283,
+     PLUS = 284,
+     MINUS = 285,
+     MULT = 286,
+     DIV = 287,
+     MOD = 288,
+     ASSIGN = 289,
+     LT = 290,
+     GT = 291,
+     NOT = 292,
      LBRACE = 293,
      RBRACE = 294,
      LPAREN = 295,
@@ -90,7 +100,7 @@ extern int yydebug;
      SEMI = 299,
      COMMA = 300,
      COLON = 301,
-     UMINUS = 302
+     LOWER_THAN_ELSE = 302
    };
 #endif
 
@@ -99,24 +109,17 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 26 "src/parser/parser.y"
-
+#line 19 "src/parser/parser.y"
 
     int int_val;
-
     float float_val;
-
-    int bool_val;
-
-    char *str_val;
-
-
-    ASTNode *node;
-
+    bool bool_val;
+    char* str_val;
+    ASTNode* node;
 
 
 /* Line 2058 of yacc.c  */
-#line 120 "parser.tab.h"
+#line 123 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
