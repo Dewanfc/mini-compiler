@@ -56,183 +56,159 @@ WHITESPACE  [ \t\r]+
 "print"         { return PRINT; }
 
 
-"true"
-{
+
+"true" {
     yylval.bool_val = 1;
     return TRUE_CONST;
 }
 
 
-"false"
-{
+"false" {
     yylval.bool_val = 0;
     return FALSE_CONST;
 }
 
 
 
-"++"
-{
+"++" {
     return INC;
 }
 
 
-"--"
-{
+"--" {
     return DEC;
 }
 
 
 
-"=="
-{
+
+"==" {
     return EQ;
 }
 
 
-"!="
-{
+"!=" {
     return NEQ;
 }
 
 
-"<="
-{
+"<=" {
     return LE;
 }
 
 
-">="
-{
+">=" {
     return GE;
 }
 
 
 
-"&&"
-{
+
+"&&" {
     return AND;
 }
 
 
-"||"
-{
+"||" {
     return OR;
 }
 
 
 
-"+"
-{
+"+" {
     return PLUS;
 }
 
 
-"-"
-{
+"-" {
     return MINUS;
 }
 
 
-"*"
-{
+"*" {
     return MULT;
 }
 
 
-"/"
-{
+"/" {
     return DIV;
 }
 
 
-"%"
-{
+"%" {
     return MOD;
 }
 
 
-"="
-{
+"=" {
     return ASSIGN;
 }
 
 
 
-"<"
-{
+"<" {
     return LT;
 }
 
 
-">"
-{
+">" {
     return GT;
 }
 
 
 
-"!"
-{
+"!" {
     return NOT;
 }
 
 
 
 
-"{"
-{
+
+"{" {
     return LBRACE;
 }
 
 
-"}"
-{
+"}" {
     return RBRACE;
 }
 
 
 
-"("
-{
+"(" {
     return LPAREN;
 }
 
 
-")"
-{
+")" {
     return RPAREN;
 }
 
 
 
-"["
-{
+"[" {
     return LBRACKET;
 }
 
 
-"]"
-{
+"]" {
     return RBRACKET;
 }
 
 
 
-";"
-{
+";" {
     return SEMI;
 }
 
 
-","
-{
+"," {
     return COMMA;
 }
 
 
-":"
-{
+":" {
     return COLON;
 }
 
@@ -240,24 +216,21 @@ WHITESPACE  [ \t\r]+
 
 
 
-{FLOAT_CONST}
-{
+{FLOAT_CONST} {
     yylval.float_val = atof(yytext);
     return FLOAT_VAL;
 }
 
 
 
-{INT_CONST}
-{
+{INT_CONST} {
     yylval.int_val = atoi(yytext);
     return INT_VAL;
 }
 
 
 
-{ID}
-{
+{ID} {
     yylval.str_val = strdup(yytext);
     return IDENTIFIER;
 }
@@ -265,32 +238,27 @@ WHITESPACE  [ \t\r]+
 
 
 
-"//".*        {
-}
 
-
-\/\*([^*]|\*+[^*/])*\*\/    {
-}
-
-{WHITESPACE}
-{
+"//".* {
 }
 
 
 
-\n
-{
+{WHITESPACE} {
+}
+
+
+
+\n {
     line_num++;
 }
 
 
 
 
-.
-{
+
+. {
     printf("Lexical Error at line %d: %s\n",
            line_num,
            yytext);
 }
-
-
