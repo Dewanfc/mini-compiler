@@ -178,30 +178,24 @@ statement:
 
 declaration:
 
-
       INT IDENTIFIER SEMI
       {
-          $$=create_node(NODE_VAR_DECL);
-
-          $$->name=$1;
+          $$ = create_node(NODE_VAR_DECL);
+          $$->name = strdup($2);
       }
-
 
 
     | FLOAT IDENTIFIER SEMI
       {
-          $$=create_node(NODE_VAR_DECL);
-
-          $$->name=$2;
+          $$ = create_node(NODE_VAR_DECL);
+          $$->name = strdup($2);
       }
-
 
 
     | BOOL IDENTIFIER SEMI
       {
-          $$=create_node(NODE_VAR_DECL);
-
-          $$->name=$2;
+          $$ = create_node(NODE_VAR_DECL);
+          $$->name = strdup($2);
       }
 
 ;
