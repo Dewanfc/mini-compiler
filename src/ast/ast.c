@@ -348,3 +348,27 @@ ASTNode* create_bool_const(int value)
 
     return node;
 }
+
+
+/*
+    Expressions
+*/
+
+
+ASTNode* create_binop(char *op,
+                      ASTNode *left,
+                      ASTNode *right)
+{
+
+    ASTNode *node = create_node(NODE_BINOP);
+
+
+    node->name = strdup(op);
+
+    node->left = left;
+
+    node->right = right;
+
+
+    return node;
+}
