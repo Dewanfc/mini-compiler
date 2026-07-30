@@ -326,3 +326,14 @@ ASTNode* create_int_const(int value)
 
     return node;
 }
+
+
+
+ASTNode* create_float_const(float value)
+{
+    ASTNode *node = create_node(NODE_FLOAT_CONST);
+
+    node->float_val = value;
+
+    return node;
+}
