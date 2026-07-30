@@ -638,3 +638,38 @@ ASTNode* create_function(char *name,
 
 
 
+ASTNode* create_function_call(char *name,
+                              ASTNode *arguments)
+{
+
+    ASTNode *node =
+        create_node(NODE_FUNCTION_CALL);
+
+
+    node->name = strdup(name);
+
+
+    node->left = arguments;
+
+
+    return node;
+}
+
+
+
+
+
+
+
+ASTNode* create_return(ASTNode *value)
+{
+
+    ASTNode *node =
+        create_node(NODE_RETURN);
+
+
+    node->left = value;
+
+
+    return node;
+}
