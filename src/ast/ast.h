@@ -227,3 +227,44 @@ ASTNode* create_array_assign(char *name,
 /*
     Statements
 */
+
+ASTNode* create_assign(ASTNode *left,
+                       ASTNode *right);
+
+
+
+ASTNode* create_print(ASTNode *expr);
+
+
+
+ASTNode* create_if(ASTNode *condition,
+                   ASTNode *body);
+
+
+
+ASTNode* create_if_else(ASTNode *condition,
+                        ASTNode *true_body,
+                        ASTNode *false_body);
+
+
+
+ASTNode* create_while(ASTNode *condition,
+                      ASTNode *body);
+
+
+
+ASTNode* create_for(ASTNode *init,
+                    ASTNode *condition,
+                    ASTNode *update,
+                    ASTNode *body);
+
+
+
+ASTNode* create_do_while(ASTNode *body,
+                         ASTNode *condition);
+
+
+
+/*
+    Functions
+*/
