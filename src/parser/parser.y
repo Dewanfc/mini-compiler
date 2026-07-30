@@ -71,3 +71,25 @@ ASTNode *root = NULL;
 %type <node> while_statement
 
 %type <node> expression
+
+/* precedence */
+
+%left OR
+
+%left AND
+
+%left EQ NEQ
+
+%left LT GT LE GE
+
+%left PLUS MINUS
+
+%left MULT DIV MOD
+
+%right NOT
+
+%right UMINUS
+
+
+
+%%
