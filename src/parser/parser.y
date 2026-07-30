@@ -482,6 +482,74 @@ DO block WHILE LPAREN expression RPAREN SEMI
 
 
 
+/* ======================
+        FUNCTIONS
+   ====================== */
+
+
+function:
+
+
+INT IDENTIFIER LPAREN RPAREN block
+
+{
+
+    $$=create_function(
+        $2,
+        "int",
+        NULL,
+        $5
+    );
+
+}
+
+;
+
+
+
+
+
+function_call:
+
+
+IDENTIFIER LPAREN RPAREN
+
+{
+
+    $$=create_function_call(
+        $1,
+        NULL
+    );
+
+}
+
+;
+
+
+
+
+
+
+
+return_statement:
+
+
+RETURN expression SEMI
+
+{
+
+    $$=create_return($2);
+
+}
+
+;
+
+
+
+
+
+
+
 
 
 
