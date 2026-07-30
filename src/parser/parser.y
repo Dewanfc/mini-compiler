@@ -330,3 +330,147 @@ block:
 
 
 
+expression:
+
+
+      expression PLUS expression
+      {
+          $$=create_binop("+",$1,$3);
+      }
+
+
+
+    | expression MINUS expression
+      {
+          $$=create_binop("-",$1,$3);
+      }
+
+
+
+    | expression MULT expression
+      {
+          $$=create_binop("*",$1,$3);
+      }
+
+
+
+    | expression DIV expression
+      {
+          $$=create_binop("/",$1,$3);
+      }
+
+
+
+    | expression MOD expression
+      {
+          $$=create_binop("%",$1,$3);
+      }
+
+
+
+    | expression LT expression
+      {
+          $$=create_binop("<",$1,$3);
+      }
+
+
+
+    | expression GT expression
+      {
+          $$=create_binop(">",$1,$3);
+      }
+
+
+
+    | expression LE expression
+      {
+          $$=create_binop("<=",$1,$3);
+      }
+
+
+
+    | expression GE expression
+      {
+          $$=create_binop(">=",$1,$3);
+      }
+
+
+
+    | expression EQ expression
+      {
+          $$=create_binop("==",$1,$3);
+      }
+
+
+
+    | expression NEQ expression
+      {
+          $$=create_binop("!=",$1,$3);
+      }
+
+
+
+    | expression AND expression
+      {
+          $$=create_binop("&&",$1,$3);
+      }
+
+
+
+    | expression OR expression
+      {
+          $$=create_binop("||",$1,$3);
+      }
+
+
+
+
+    /* Unary operators */
+
+
+    | MINUS expression %prec UMINUS
+      {
+          $$=create_unary("-",$2);
+      }
+
+
+
+    | NOT expression
+      {
+          $$=create_unary("!",$2);
+      }
+
+
+
+    | INT_VAL
+      {
+          $$=create_int_const($1);
+      }
+
+
+
+    | FLOAT_VAL
+      {
+          $$=create_float_const($1);
+      }
+
+
+
+    | IDENTIFIER
+      {
+          $$=create_identifier($1);
+      }
+
+
+
+    | LPAREN expression RPAREN
+      {
+          $$=$2;
+      }
+
+
+;
+
+
+
+%%
