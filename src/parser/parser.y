@@ -360,3 +360,24 @@ IDENTIFIER LBRACKET expression RBRACKET ASSIGN expression SEMI
 
 
 ;
+
+
+
+/* ======================
+        PRINT
+   ====================== */
+
+
+print_statement:
+
+
+PRINT expression SEMI
+
+{
+
+    $$=create_print($2);
+
+}
+
+;
+
