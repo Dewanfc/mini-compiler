@@ -147,3 +147,33 @@ ASTNode *root = NULL;
 %type <node> switch_statement
 
 
+
+/* ======================
+    PRECEDENCE
+   ====================== */
+
+
+%left OR
+
+%left AND
+
+
+%left EQ NEQ
+
+%left LT GT LE GE
+
+
+%left PLUS MINUS
+
+%left MULT DIV MOD
+
+
+%right NOT
+
+%right UMINUS
+
+
+
+
+%%
+
