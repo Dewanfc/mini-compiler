@@ -304,3 +304,29 @@ while_statement:
 
 
 
+block:
+
+
+      LBRACE statements RBRACE
+      {
+
+          $$=create_node(NODE_BLOCK);
+
+
+          $$->left=$2;
+
+      }
+
+
+
+    | LBRACE RBRACE
+      {
+
+          $$=create_node(NODE_BLOCK);
+
+      }
+
+;
+
+
+
