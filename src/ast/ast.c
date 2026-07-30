@@ -722,3 +722,43 @@ ASTNode* create_case(ASTNode *value,
 
 
 
+ASTNode* create_default(ASTNode *body)
+{
+
+    ASTNode *node =
+        create_node(NODE_DEFAULT);
+
+
+    node->left = body;
+
+
+    return node;
+}
+
+
+
+
+
+
+
+
+
+/*
+    Increment / Decrement
+*/
+
+
+ASTNode* create_increment(ASTNode *id)
+{
+
+    ASTNode *node =
+        create_node(NODE_INCREMENT);
+
+
+    node->left = id;
+
+
+    return node;
+}
+
+
