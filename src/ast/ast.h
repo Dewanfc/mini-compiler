@@ -268,3 +268,23 @@ ASTNode* create_do_while(ASTNode *body,
 /*
     Functions
 */
+
+ASTNode* create_function(char *name,
+                         char *return_type,
+                         ASTNode *params,
+                         ASTNode *body);
+
+
+
+ASTNode* create_function_call(char *name,
+                              ASTNode *arguments);
+
+
+
+ASTNode* create_return(ASTNode *value);
+
+
+
+/*
+    Switch case
+*/
