@@ -271,3 +271,39 @@ ASTNode* create_unary(char *op,
 
     return node;
 }
+
+#include "ast.h"
+
+
+
+ASTNode* create_node(NodeType type)
+{
+    ASTNode *node = (ASTNode*)malloc(sizeof(ASTNode));
+
+    node->type = type;
+
+    node->name = NULL;
+
+    node->int_val = 0;
+
+    node->float_val = 0.0;
+
+    node->bool_val = 0;
+
+
+    node->left = NULL;
+
+    node->right = NULL;
+
+    node->third = NULL;
+
+    node->next = NULL;
+
+
+    node->array_size = 0;
+
+    node->return_type = NULL;
+
+
+    return node;
+}
