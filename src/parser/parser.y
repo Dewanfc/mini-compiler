@@ -193,8 +193,8 @@ expr:
     | NOT expr              { $$ = create_unary("!", $2); }
     | MINUS expr %prec NOT  { $$ = create_unary("-", $2); }
     
-    | IDENTIFIER INC        { $$ = create_unary("++", create_identifier($1)); free($1); }
-    | IDENTIFIER DEC        { $$ = create_unary("--", create_identifier($1)); free($1); }
+    | expr INC              { $$ = create_unary("++", $1); }
+    | expr DEC              { $$ = create_unary("--", $1); }
     
     | LPAREN expr RPAREN    { $$ = $2; }
     

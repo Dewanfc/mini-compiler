@@ -1,9 +1,40 @@
-{
-int x;
-x = 10;
-
-if(x > 5 && x < 20)
-{
-    print x;
+int sum(int a, int b) {
+    return a + b;
 }
+
+int x;
+int i;
+bool flag;
+int arr[5];
+
+arr[0] = 10;
+arr[1] = 20;
+
+x = 10 + 20;
+
+x++;
+arr[0]--;
+
+print sum(x, arr[0]);
+
+if (false) {
+    print 999;
+} else {
+    print 1;
+}
+
+for (i = 0; i < 3; i++) {
+    print i;
+}
+
+i = 0;
+do {
+    i++;
+} while (i < 3);
+
+switch (x) {
+    case 31:
+        print x;
+    default:
+        print 0;
 }
