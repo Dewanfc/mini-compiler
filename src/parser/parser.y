@@ -553,6 +553,29 @@ RETURN expression SEMI
 
 
 
+/* ======================
+        SWITCH
+   ====================== */
+
+
+switch_statement:
+
+
+SWITCH LPAREN expression RPAREN block
+
+{
+
+    $$=create_switch(
+        $3,
+        $5
+    );
+
+}
+
+;
+
+
+
 |
 
 IF LPAREN expression RPAREN block ELSE block
