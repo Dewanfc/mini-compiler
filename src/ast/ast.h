@@ -306,3 +306,13 @@ ASTNode* create_default(ASTNode *body);
 /*
     Increment decrement
 */
+
+ASTNode* create_increment(ASTNode *id);
+
+
+
+ASTNode* create_decrement(ASTNode *id);
+
+
+
+#endif
