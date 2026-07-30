@@ -673,3 +673,52 @@ ASTNode* create_return(ASTNode *value)
 
     return node;
 }
+
+
+/*
+    Switch
+*/
+
+
+ASTNode* create_switch(ASTNode *expr,
+                       ASTNode *cases)
+{
+
+    ASTNode *node =
+        create_node(NODE_SWITCH);
+
+
+    node->left = expr;
+
+    node->right = cases;
+
+
+    return node;
+}
+
+
+
+
+
+
+
+
+ASTNode* create_case(ASTNode *value,
+                     ASTNode *body)
+{
+
+    ASTNode *node =
+        create_node(NODE_CASE);
+
+
+    node->left = value;
+
+    node->right = body;
+
+
+    return node;
+}
+
+
+
+
