@@ -165,3 +165,26 @@ typedef struct ASTNode
 /*
     Basic constructors
 */
+ASTNode* create_node(NodeType type);
+
+
+
+ASTNode* create_identifier(char *name);
+
+
+
+ASTNode* create_int_const(int value);
+
+
+
+ASTNode* create_float_const(float value);
+
+
+
+ASTNode* create_bool_const(int value);
+
+
+
+/*
+    Expressions
+*/
