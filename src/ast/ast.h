@@ -109,3 +109,25 @@ typedef struct ASTNode
 
     struct ASTNode *right;
 
+/*
+        Third child
+
+        Used for:
+        - for loop update
+        - if else false branch
+        - function parameters
+    */
+
+    struct ASTNode *third;
+
+
+
+    /*
+        Linked list
+
+        Used for:
+        - statements
+        - parameters
+        - arguments
+        - cases
+    */
