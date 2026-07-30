@@ -288,3 +288,21 @@ ASTNode* create_return(ASTNode *value);
 /*
     Switch case
 */
+
+ASTNode* create_switch(ASTNode *expr,
+                       ASTNode *cases);
+
+
+
+ASTNode* create_case(ASTNode *value,
+                     ASTNode *body);
+
+
+
+ASTNode* create_default(ASTNode *body);
+
+
+
+/*
+    Increment decrement
+*/
