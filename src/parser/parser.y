@@ -322,3 +322,41 @@ INT IDENTIFIER LBRACKET INT_VAL RBRACKET SEMI
 
 
 
+
+/* ======================
+        ASSIGNMENT
+   ====================== */
+
+
+assignment:
+
+
+IDENTIFIER ASSIGN expression SEMI
+
+{
+
+    $$=create_assign(
+        create_identifier($1),
+        $3
+    );
+
+}
+
+
+
+|
+
+IDENTIFIER LBRACKET expression RBRACKET ASSIGN expression SEMI
+
+{
+
+    $$=create_array_assign(
+        $1,
+        $3,
+        $6
+    );
+
+}
+
+
+;
