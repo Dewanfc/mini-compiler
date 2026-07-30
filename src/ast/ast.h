@@ -69,6 +69,8 @@ typedef enum
 
 } NodeType;
 
+
+
 typedef struct ASTNode
 {
 
@@ -109,7 +111,8 @@ typedef struct ASTNode
 
     struct ASTNode *right;
 
-/*
+
+    /*
         Third child
 
         Used for:
@@ -132,7 +135,7 @@ typedef struct ASTNode
         - cases
     */
 
-     struct ASTNode *next;
+    struct ASTNode *next;
 
 
 
@@ -165,6 +168,8 @@ typedef struct ASTNode
 /*
     Basic constructors
 */
+
+
 ASTNode* create_node(NodeType type);
 
 
@@ -189,6 +194,7 @@ ASTNode* create_bool_const(int value);
     Expressions
 */
 
+
 ASTNode* create_binop(char *op,
                       ASTNode *left,
                       ASTNode *right);
@@ -203,6 +209,7 @@ ASTNode* create_unary(char *op,
 /*
     Variables
 */
+
 
 ASTNode* create_var_decl(char *name);
 
@@ -227,6 +234,7 @@ ASTNode* create_array_assign(char *name,
 /*
     Statements
 */
+
 
 ASTNode* create_assign(ASTNode *left,
                        ASTNode *right);
@@ -269,6 +277,7 @@ ASTNode* create_do_while(ASTNode *body,
     Functions
 */
 
+
 ASTNode* create_function(char *name,
                          char *return_type,
                          ASTNode *params,
@@ -289,6 +298,7 @@ ASTNode* create_return(ASTNode *value);
     Switch case
 */
 
+
 ASTNode* create_switch(ASTNode *expr,
                        ASTNode *cases);
 
@@ -306,6 +316,7 @@ ASTNode* create_default(ASTNode *body);
 /*
     Increment decrement
 */
+
 
 ASTNode* create_increment(ASTNode *id);
 
