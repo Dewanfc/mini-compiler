@@ -188,10 +188,8 @@ ASTNode* create_binop(char *op,
 
 
 normal_node:
-
-
+{
     ASTNode *node = create_node(NODE_BINOP);
-
 
 
     node->name = strdup(op);
@@ -200,7 +198,6 @@ normal_node:
     node->left = left;
 
     node->right = right;
-
 
 
     return node;
