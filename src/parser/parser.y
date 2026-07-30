@@ -402,6 +402,88 @@ IF LPAREN expression RPAREN block
 }
 
 
+/* ======================
+        WHILE
+   ====================== */
+
+
+while_statement:
+
+
+WHILE LPAREN expression RPAREN block
+
+{
+
+    $$=create_while(
+        $3,
+        $5
+    );
+
+}
+
+;
+
+
+
+
+
+
+
+
+/* ======================
+        FOR
+   ====================== */
+
+
+for_statement:
+
+
+FOR LPAREN assignment expression SEMI expression RPAREN block
+
+{
+
+    $$=create_for(
+        $3,
+        $4,
+        $6,
+        $8
+    );
+
+}
+
+;
+
+
+
+
+
+
+
+/* ======================
+        DO WHILE
+   ====================== */
+
+
+do_statement:
+
+
+DO block WHILE LPAREN expression RPAREN SEMI
+
+{
+
+    $$=create_do_while(
+        $2,
+        $5
+    );
+
+}
+
+;
+
+
+
+
+
 
 |
 
