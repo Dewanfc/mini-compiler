@@ -9,8 +9,10 @@ typedef enum
     NODE_ASSIGN,
 
     NODE_BINOP,
+    NODE_UNARY,
 
     NODE_IDENTIFIER,
+
     NODE_INT_CONST,
     NODE_FLOAT_CONST,
 
@@ -31,20 +33,25 @@ typedef struct ASTNode
 {
     NodeType type;
 
+
     char *name;
+
 
     int int_val;
     float float_val;
 
 
+
     struct ASTNode *left;
+
     struct ASTNode *right;
 
-    // Used for else block in if-else
+
+    // Used for IF-ELSE third child
     struct ASTNode *third;
 
 
-    // Linked list of statements
+    // Statement linked list
     struct ASTNode *next;
 
 
@@ -52,17 +59,28 @@ typedef struct ASTNode
 
 
 
+
 ASTNode* create_node(NodeType type);
+
 
 ASTNode* create_identifier(char *name);
 
+
 ASTNode* create_int_const(int value);
 
+
 ASTNode* create_float_const(float value);
+
+
 
 ASTNode* create_binop(char *op,
                       ASTNode *left,
                       ASTNode *right);
+
+
+
+ASTNode* create_unary(char *op,
+                      ASTNode *child);
 
 
 

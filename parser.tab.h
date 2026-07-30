@@ -86,12 +86,12 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 17 "src/parser/parser.y"
+#line 18 "src/parser/parser.y"
 
     int int_val;
     float float_val;
-    char* str_val;
-    struct ASTNode* node;
+    char *str_val;
+    struct ASTNode *node;
 
 
 /* Line 2058 of yacc.c  */
