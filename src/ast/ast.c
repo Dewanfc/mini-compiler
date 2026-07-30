@@ -444,3 +444,25 @@ ASTNode* create_array_access(char *name,
 
     return node;
 }
+
+
+
+ASTNode* create_array_assign(char *name,
+                             ASTNode *index,
+                             ASTNode *value)
+{
+
+    ASTNode *node =
+        create_node(NODE_ARRAY_ASSIGN);
+
+
+    node->name = strdup(name);
+
+
+    node->left = index;
+
+    node->right = value;
+
+
+    return node;
+}
