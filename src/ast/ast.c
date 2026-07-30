@@ -409,3 +409,20 @@ ASTNode* create_var_decl(char *name)
     return node;
 }
 
+
+ASTNode* create_array_decl(char *name,
+                           int size)
+{
+
+    ASTNode *node =
+        create_node(NODE_ARRAY_DECL);
+
+
+    node->name = strdup(name);
+
+
+    node->array_size = size;
+
+
+    return node;
+}
