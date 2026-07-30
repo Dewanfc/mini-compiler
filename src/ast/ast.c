@@ -490,3 +490,17 @@ ASTNode* create_assign(ASTNode *left,
 
     return node;
 }
+
+
+ASTNode* create_print(ASTNode *expr)
+{
+
+    ASTNode *node =
+        create_node(NODE_PRINT);
+
+
+    node->left = expr;
+
+
+    return node;
+}
