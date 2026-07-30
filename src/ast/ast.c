@@ -466,3 +466,27 @@ ASTNode* create_array_assign(char *name,
 
     return node;
 }
+
+
+
+
+/*
+    Statements
+*/
+
+
+ASTNode* create_assign(ASTNode *left,
+                       ASTNode *right)
+{
+
+    ASTNode *node =
+        create_node(NODE_ASSIGN);
+
+
+    node->left = left;
+
+    node->right = right;
+
+
+    return node;
+}
