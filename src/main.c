@@ -15,31 +15,48 @@ extern ASTNode *root;
 /* TAC generator */
 extern char *generate_tac(ASTNode *node);
 
+/* Optimizer */
+extern ASTNode *remove_dead_code(ASTNode *node);
+
+/* Graphviz */
+extern void create_ast_graph(ASTNode *root);
+
 int main(int argc, char *argv[])
 {
     if (argc > 1)
     {
         yyin = fopen(argv[1], "r");
+
         if (yyin == NULL)
         {
-            fprintf(stderr, "Error: Could not open file '%s'\n", argv[1]);
+            fprintf(stderr,
+                    "Error: Could not open file '%s'\n",
+                    argv[1]);
             return EXIT_FAILURE;
         }
     }
 
     printf("========== Compiler Started ==========\n");
 
-    /* Initialize symbol table */
+    /* Initialize Symbol Table */
     enter_scope();
 
-    /* Parse input */
+    /* Parse */
     if (yyparse() == 0)
     {
         printf("Syntax Analysis: PASSED\n");
 
         if (root != NULL)
         {
+            /* Optimization */
+            root = remove_dead_code(root);
+
+            /* Generate AST Graph */
+            create_ast_graph(root);
+
             printf("Generating Three Address Code (TAC)...\n");
+
+            /* Generate TAC */
             generate_tac(root);
         }
         else
