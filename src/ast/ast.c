@@ -521,3 +521,23 @@ ASTNode* create_if(ASTNode *condition,
 
     return node;
 }
+
+
+ASTNode* create_if_else(ASTNode *condition,
+                        ASTNode *true_body,
+                        ASTNode *false_body)
+{
+
+    ASTNode *node =
+        create_node(NODE_IF_ELSE);
+
+
+    node->left = condition;
+
+    node->right = true_body;
+
+    node->third = false_body;
+
+
+    return node;
+}
