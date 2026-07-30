@@ -504,3 +504,20 @@ ASTNode* create_print(ASTNode *expr)
 
     return node;
 }
+
+
+ASTNode* create_if(ASTNode *condition,
+                   ASTNode *body)
+{
+
+    ASTNode *node =
+        create_node(NODE_IF);
+
+
+    node->left = condition;
+
+    node->right = body;
+
+
+    return node;
+}
