@@ -426,3 +426,21 @@ ASTNode* create_array_decl(char *name,
 
     return node;
 }
+
+
+ASTNode* create_array_access(char *name,
+                             ASTNode *index)
+{
+
+    ASTNode *node =
+        create_node(NODE_ARRAY_ACCESS);
+
+
+    node->name = strdup(name);
+
+
+    node->left = index;
+
+
+    return node;
+}
