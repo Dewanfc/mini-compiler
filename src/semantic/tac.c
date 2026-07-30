@@ -1,0 +1,140 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "../ast/ast.h"
+
+int temp_count = 1;
+int label_count = 1;
+
+
+char *new_temp()
+{
+    char *temp = malloc(10);
+    sprintf(temp, "t%d", temp_count++);
+    return temp;
+}
+
+
+char *new_label()
+{
+    char *label = malloc(10);
+    sprintf(label, "L%d", label_count++);
+    return label;
+}
+
+
+
+char *generate_tac(ASTNode *node)
+{
+    if(node == NULL)
+        return NULL;
+
+
+    switch(node->type)
+    {
+
+    case NODE_INT_CONST:
+    {
+        char *temp = new_temp();
+
+        printf("%s = %d\n",
+               temp,
+               node->int_val);
+
+        return temp;
+    }
+
+
+    case NODE_IDENTIFIER:
+    {
+        return node->name;
+    }
+
+
+    case NODE_BINOP:
+    {
+        char *left =
+            generate_tac(node->left);
+
+        char *right =
+            generate_tac(node->right);
+
+
+        char *temp = new_temp();
+
+
+        printf("%s = %s %s %s\n",
+               temp,
+               left,
+               node->name,
+               right);
+
+
+        return temp;
+    }
+
+
+    case NODE_ASSIGN:
+    {
+        char *value =
+            generate_tac(node->right);
+
+
+        printf("%s = %s\n",
+               node->left->name,
+               value);
+
+
+        return node->left->name;
+    }
+
+
+
+    case NODE_PRINT:
+    {
+        char *value =
+            generate_tac(node->left);
+
+
+        if(value != NULL)
+            printf("print %s\n", value);
+
+
+        return NULL;
+    }
+
+
+
+    case NODE_BLOCK:
+    {
+        ASTNode *current =
+            node->left;
+
+
+        while(current != NULL)
+        {
+            generate_tac(current);
+            current = current->next;
+        }
+
+
+        return NULL;
+    }
+
+
+
+    default:
+    {
+        if(node->left)
+            generate_tac(node->left);
+
+
+        if(node->right)
+            generate_tac(node->right);
+
+
+        return NULL;
+    }
+
+    }
+
+}
