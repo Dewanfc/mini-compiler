@@ -44,6 +44,8 @@ ASTNode *root = NULL;
 /* ======================
         TOKENS
    ====================== */
+
+
 %token <int_val> INT_VAL
 
 %token <float_val> FLOAT_VAL
@@ -148,6 +150,7 @@ ASTNode *root = NULL;
 
 
 
+
 /* ======================
     PRECEDENCE
    ====================== */
@@ -176,6 +179,8 @@ ASTNode *root = NULL;
 
 
 %%
+
+
 
 program:
 
@@ -255,6 +260,8 @@ statement:
 
 
 
+
+
 /* ======================
         BLOCK
    ====================== */
@@ -288,6 +295,10 @@ LBRACE RBRACE
 
 
 
+
+
+
+
 /* ======================
         DECLARATION
    ====================== */
@@ -317,6 +328,9 @@ INT IDENTIFIER LBRACKET INT_VAL RBRACKET SEMI
 }
 
 ;
+
+
+
 
 
 
@@ -363,6 +377,12 @@ IDENTIFIER LBRACKET expression RBRACKET ASSIGN expression SEMI
 
 
 
+
+
+
+
+
+
 /* ======================
         PRINT
    ====================== */
@@ -384,6 +404,11 @@ PRINT expression SEMI
 
 
 
+
+
+
+
+
 /* ======================
         IF
    ====================== */
@@ -400,6 +425,31 @@ IF LPAREN expression RPAREN block
     $$=create_if($3,$5);
 
 }
+
+
+
+|
+
+IF LPAREN expression RPAREN block ELSE block
+
+
+{
+
+    $$=create_if_else(
+        $3,
+        $5,
+        $7
+    );
+
+}
+
+;
+
+
+
+
+
+
 
 
 /* ======================
@@ -482,6 +532,11 @@ DO block WHILE LPAREN expression RPAREN SEMI
 
 
 
+
+
+
+
+
 /* ======================
         FUNCTIONS
    ====================== */
@@ -552,7 +607,6 @@ RETURN expression SEMI
 
 
 
-
 /* ======================
         SWITCH
    ====================== */
@@ -576,17 +630,202 @@ SWITCH LPAREN expression RPAREN block
 
 
 
+
+
+
+
+
+
+
+/* ======================
+        EXPRESSIONS
+   ====================== */
+
+
+expression:
+
+
+expression PLUS expression
+
+{
+
+    $$=create_binop("+",$1,$3);
+
+}
+
+
+
 |
 
-IF LPAREN expression RPAREN block ELSE block
+expression MINUS expression
+
+{
+
+    $$=create_binop("-",$1,$3);
+
+}
+
+
+
+|
+
+expression MULT expression
+
+{
+
+    $$=create_binop("*",$1,$3);
+
+}
+
+
+
+|
+
+expression DIV expression
+
+{
+
+    $$=create_binop("/",$1,$3);
+
+}
+
+
+
+|
+
+expression GT expression
+
+{
+
+    $$=create_binop(">",$1,$3);
+
+}
+
+
+
+|
+
+expression LT expression
+
+{
+
+    $$=create_binop("<",$1,$3);
+
+}
+
+
+
+|
+
+expression AND expression
+
+{
+
+    $$=create_binop("&&",$1,$3);
+
+}
+
+
+
+|
+
+expression OR expression
+
+{
+
+    $$=create_binop("||",$1,$3);
+
+}
+
+
+
+|
+
+MINUS expression %prec UMINUS
+
+{
+
+    $$=create_unary("-",$2);
+
+}
+
+
+
+|
+
+NOT expression
+
+{
+
+    $$=create_unary("!",$2);
+
+}
+
+
+
+|
+
+IDENTIFIER
+
+{
+
+    $$=create_identifier($1);
+
+}
+
+
+
+|
+
+INT_VAL
+
+{
+
+    $$=create_int_const($1);
+
+}
+
+
+
+|
+
+array_access
 
 
 {
 
-    $$=create_if_else(
-        $3,
-        $5,
-        $7
+    $$=$1;
+
+}
+
+
+
+|
+
+function_call
+
+{
+
+    $$=$1;
+
+}
+
+
+
+;
+
+
+
+array_access:
+
+
+IDENTIFIER LBRACKET expression RBRACKET
+
+{
+
+    $$=create_array_access(
+        $1,
+        $3
     );
 
 }
@@ -596,3 +835,17 @@ IF LPAREN expression RPAREN block ELSE block
 
 
 
+%%
+
+
+
+
+void yyerror(const char *s)
+{
+
+    fprintf(stderr,
+    "Syntax Error at line %d: %s\n",
+    line_num,
+    s);
+
+}
