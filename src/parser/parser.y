@@ -381,3 +381,45 @@ PRINT expression SEMI
 
 ;
 
+
+
+
+/* ======================
+        IF
+   ====================== */
+
+
+if_statement:
+
+
+IF LPAREN expression RPAREN block
+
+
+{
+
+    $$=create_if($3,$5);
+
+}
+
+
+
+|
+
+IF LPAREN expression RPAREN block ELSE block
+
+
+{
+
+    $$=create_if_else(
+        $3,
+        $5,
+        $7
+    );
+
+}
+
+;
+
+
+
+
