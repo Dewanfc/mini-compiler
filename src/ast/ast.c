@@ -580,3 +580,61 @@ ASTNode* create_for(ASTNode *init,
 
     return node;
 }
+
+
+ASTNode* create_do_while(ASTNode *body,
+                         ASTNode *condition)
+{
+
+    ASTNode *node =
+        create_node(NODE_DO_WHILE);
+
+
+    node->left = body;
+
+    node->right = condition;
+
+
+    return node;
+}
+
+
+
+
+
+
+
+
+
+/*
+    Functions
+*/
+
+
+ASTNode* create_function(char *name,
+                         char *return_type,
+                         ASTNode *params,
+                         ASTNode *body)
+{
+
+    ASTNode *node =
+        create_node(NODE_FUNCTION);
+
+
+    node->name = strdup(name);
+
+
+    node->return_type = strdup(return_type);
+
+
+    node->left = params;
+
+    node->right = body;
+
+
+    return node;
+}
+
+
+
+
