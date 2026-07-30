@@ -337,3 +337,14 @@ ASTNode* create_float_const(float value)
 
     return node;
 }
+
+
+
+ASTNode* create_bool_const(int value)
+{
+    ASTNode *node = create_node(NODE_BOOL_CONST);
+
+    node->bool_val = value;
+
+    return node;
+}
