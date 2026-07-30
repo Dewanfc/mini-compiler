@@ -90,3 +90,62 @@ WHITESPACE  [ \t\r]+
                     yylval.bool_val = 0;
                     return FALSE_CONST;
                 }
+
+
+
+/* ===========================
+        INCREMENT DECREMENT
+   =========================== */
+
+
+"++"            { return INC; }
+
+"--"            { return DEC; }
+
+
+
+
+
+/* ===========================
+        OPERATORS
+   =========================== */
+
+
+"+"             { return PLUS; }
+
+"-"             { return MINUS; }
+
+"*"             { return MULT; }
+
+"/"             { return DIV; }
+
+"%"             { return MOD; }
+
+
+
+"="             { return ASSIGN; }
+
+
+
+"=="            { return EQ; }
+
+"!="            { return NEQ; }
+
+
+
+"<="            { return LE; }
+
+">="            { return GE; }
+
+
+"<"             { return LT; }
+
+">"             { return GT; }
+
+
+
+"&&"            { return AND; }
+
+"||"            { return OR; }
+
+"!"             { return NOT; }
