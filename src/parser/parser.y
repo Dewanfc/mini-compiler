@@ -12,3 +12,12 @@ void yyerror(const char *s);
 ASTNode *root = NULL;
 
 %}
+
+%union
+{
+    int int_val;
+    float float_val;
+    char *str_val;
+    struct ASTNode *node;
+}
+
