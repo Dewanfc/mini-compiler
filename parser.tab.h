@@ -48,37 +48,49 @@ extern int yydebug;
    enum yytokentype {
      INT_VAL = 258,
      FLOAT_VAL = 259,
-     IDENTIFIER = 260,
-     INT = 261,
-     FLOAT = 262,
-     BOOL = 263,
-     IF = 264,
-     ELSE = 265,
-     WHILE = 266,
-     PRINT = 267,
-     TRUE_CONST = 268,
-     FALSE_CONST = 269,
-     PLUS = 270,
-     MINUS = 271,
-     MULT = 272,
-     DIV = 273,
-     MOD = 274,
-     ASSIGN = 275,
-     LT = 276,
-     GT = 277,
-     LE = 278,
-     GE = 279,
-     EQ = 280,
-     NEQ = 281,
-     AND = 282,
-     OR = 283,
-     NOT = 284,
-     LBRACE = 285,
-     RBRACE = 286,
-     LPAREN = 287,
-     RPAREN = 288,
-     SEMI = 289,
-     UMINUS = 290
+     TRUE_CONST = 260,
+     FALSE_CONST = 261,
+     IDENTIFIER = 262,
+     INT = 263,
+     FLOAT = 264,
+     BOOL = 265,
+     IF = 266,
+     ELSE = 267,
+     WHILE = 268,
+     FOR = 269,
+     DO = 270,
+     SWITCH = 271,
+     CASE = 272,
+     DEFAULT = 273,
+     RETURN = 274,
+     PRINT = 275,
+     PLUS = 276,
+     MINUS = 277,
+     MULT = 278,
+     DIV = 279,
+     MOD = 280,
+     ASSIGN = 281,
+     LT = 282,
+     GT = 283,
+     LE = 284,
+     GE = 285,
+     EQ = 286,
+     NEQ = 287,
+     AND = 288,
+     OR = 289,
+     NOT = 290,
+     INC = 291,
+     DEC = 292,
+     LBRACE = 293,
+     RBRACE = 294,
+     LPAREN = 295,
+     RPAREN = 296,
+     LBRACKET = 297,
+     RBRACKET = 298,
+     SEMI = 299,
+     COMMA = 300,
+     COLON = 301,
+     UMINUS = 302
    };
 #endif
 
@@ -87,16 +99,24 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 18 "src/parser/parser.y"
+#line 26 "src/parser/parser.y"
+
 
     int int_val;
+
     float float_val;
+
+    int bool_val;
+
     char *str_val;
-    struct ASTNode *node;
+
+
+    ASTNode *node;
+
 
 
 /* Line 2058 of yacc.c  */
-#line 100 "parser.tab.h"
+#line 120 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
