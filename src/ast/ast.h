@@ -77,14 +77,6 @@ typedef struct ASTNode
     NodeType type;
 
 
-    /*
-        Stores:
-        variable name
-        operator symbol
-        function name
-        array name
-    */
-
     char *name;
 
 
@@ -112,42 +104,13 @@ typedef struct ASTNode
     struct ASTNode *right;
 
 
-    /*
-        Third child
-
-        Used for:
-        - for loop update
-        - if else false branch
-        - function parameters
-    */
-
     struct ASTNode *third;
 
 
 
-    /*
-        Linked list
-
-        Used for:
-        - statements
-        - parameters
-        - arguments
-        - cases
-    */
-
     struct ASTNode *next;
 
 
-
-    /*
-        Array size
-
-        Example:
-
-        int arr[10]
-
-        size = 10
-    */
 
     int array_size;
 
