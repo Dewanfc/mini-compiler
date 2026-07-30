@@ -213,6 +213,29 @@ char* generate_tac(ASTNode* node) {
         case NODE_ARRAY_DECL:
         case NODE_VAR_DECL:
             return NULL;
+        case NODE_SWITCH: {
+            char* expr = generate_tac(node->data.switch_stmt.expr);
+            printf("t_switch = %s\n", expr);
+            generate_tac(node->data.switch_stmt.cases);
+            free(expr);
+            return NULL;
+        }
+
+        case NODE_CASE: {
+            char* val = generate_tac(node->data.case_stmt.value);
+            char* next_case = new_label();
+            printf("if t_switch != %s goto %s\n", val, next_case);
+            generate_tac(node->data.case_stmt.body);
+            printf("%s:\n", next_case);
+            free(val);
+            return NULL;
+        }
+
+        case NODE_DEFAULT: {
+            printf("default:\n");
+            generate_tac(node->data.case_stmt.body);
+            return NULL;
+        }
 
         default:
             return NULL;
