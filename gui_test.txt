@@ -1,9 +1,15 @@
-int sum(int a, int b) {
-    return a + b;
+int x;
+int y;
+bool flag;
+x = 10;
+y = 0;
+flag = true;
+while (x > 0) {
+y = y + x;
+x = x - 1;
 }
-
-int main() {
-    int x;
-    x = 10 + 20;
-    print sum(x, 5);
+if (flag == true) {
+print y;
+} else {
+print x;
 }
