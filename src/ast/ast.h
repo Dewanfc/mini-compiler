@@ -203,3 +203,27 @@ ASTNode* create_unary(char *op,
 /*
     Variables
 */
+
+ASTNode* create_var_decl(char *name);
+
+
+
+ASTNode* create_array_decl(char *name,
+                           int size);
+
+
+
+ASTNode* create_array_access(char *name,
+                             ASTNode *index);
+
+
+
+ASTNode* create_array_assign(char *name,
+                             ASTNode *index,
+                             ASTNode *value);
+
+
+
+/*
+    Statements
+*/
