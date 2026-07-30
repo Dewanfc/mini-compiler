@@ -474,3 +474,11 @@ expression:
 
 
 %%
+
+void yyerror(const char *s)
+{
+    fprintf(stderr,
+            "Syntax Error at line %d: %s\n",
+            line_num,
+            s);
+}
