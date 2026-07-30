@@ -176,3 +176,131 @@ statement:
 
 
 
+declaration:
+
+
+      INT IDENTIFIER SEMI
+      {
+          $$=create_node(NODE_VAR_DECL);
+
+          $$->name=$1;
+      }
+
+
+
+    | FLOAT IDENTIFIER SEMI
+      {
+          $$=create_node(NODE_VAR_DECL);
+
+          $$->name=$2;
+      }
+
+
+
+    | BOOL IDENTIFIER SEMI
+      {
+          $$=create_node(NODE_VAR_DECL);
+
+          $$->name=$2;
+      }
+
+;
+
+
+
+assignment:
+
+
+      IDENTIFIER ASSIGN expression SEMI
+      {
+
+          ASTNode *id =
+              create_identifier($1);
+
+
+
+          $$=create_binop("=",
+                          id,
+                          $3);
+
+
+
+          $$->type=NODE_ASSIGN;
+
+      }
+
+;
+
+
+
+print_statement:
+
+
+      PRINT expression SEMI
+      {
+          $$=create_node(NODE_PRINT);
+
+          $$->left=$2;
+      }
+
+;
+
+
+
+if_statement:
+
+
+      IF LPAREN expression RPAREN block
+      {
+
+          $$=create_node(NODE_IF);
+
+
+          $$->left=$3;
+
+          $$->right=$5;
+
+      }
+
+
+
+    | IF LPAREN expression RPAREN block ELSE block
+      {
+
+          $$=create_node(NODE_IF_ELSE);
+
+
+          $$->left=$3;
+
+
+          $$->right=$5;
+
+
+          $$->third=$7;
+
+      }
+
+;
+
+
+
+while_statement:
+
+
+      WHILE LPAREN expression RPAREN block
+      {
+
+          $$=create_node(NODE_WHILE);
+
+
+          $$->left=$3;
+
+
+          $$->right=$5;
+
+      }
+
+;
+
+
+
