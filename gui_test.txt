@@ -1,7 +1,13 @@
-{
-float position;
-float initial=1;
-float rate = 2.0;
+int x;
+int y;
 
-position = initial + rate *60;
+x = 10;
+
+if (x > 5) {
+    y = 100;
 }
+else {
+    y = 200;
+}
+
+print y;

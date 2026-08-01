@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -g
-INCLUDES = -Isrc -Isrc/ast -Isrc/semantic -Isrc/optimization -Isrc/visualization
+INCLUDES = -Isrc -Isrc/ast -Isrc/semantic -Isrc/optimization -Isrc/visualization -Isrc/parser
 
-OBJS = parser.tab.o lex.yy.o ast.o tac.o optimizer.o ast_graphviz.o main.o
+OBJS = parser.tab.o lex.yy.o ast.o symtab.o tac.o optimizer.o ast_graphviz.o main.o
 
 all: compiler.exe
 
@@ -23,6 +23,9 @@ lex.yy.o: lex.yy.c
 
 ast.o: src/ast/ast.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c src/ast/ast.c -o ast.o
+
+symtab.o: src/semantic/symtab.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c src/semantic/symtab.c -o symtab.o
 
 tac.o: src/semantic/tac.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c src/semantic/tac.c -o tac.o

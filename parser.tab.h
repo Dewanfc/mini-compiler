@@ -41,7 +41,7 @@ extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
 /* Line 2058 of yacc.c  */
-#line 14 "src/parser/parser.y"
+#line 16 "src/parser/parser.y"
 
     #include <stdbool.h>
     #include "ast.h"
@@ -109,7 +109,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 19 "src/parser/parser.y"
+#line 21 "src/parser/parser.y"
 
     int int_val;
     float float_val;

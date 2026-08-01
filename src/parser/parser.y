@@ -1,7 +1,9 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ast.h"
+#include "symtab.h"
 
 extern int yylex();
 extern int line_num;
@@ -85,7 +87,7 @@ stmt:
     ;
 
 block:
-    LBRACE stmt_list RBRACE { $$ = $2; }
+    LBRACE { enter_scope(); } stmt_list RBRACE { $$ = $3; exit_scope(); }
     ;
 
 type:
@@ -95,19 +97,47 @@ type:
     ;
 
 var_decl:
-    type IDENTIFIER { $$ = create_var_decl($1, $2); free($2); }
+    type IDENTIFIER { 
+        DataType t = TYPE_UNKNOWN;
+        if(strcmp($1, "int")==0) t = TYPE_INT;
+        else if(strcmp($1, "float")==0) t = TYPE_FLOAT;
+        else if(strcmp($1, "bool")==0) t = TYPE_BOOL;
+        insert_symbol($2, t, line_num);
+        $$ = create_var_decl($1, $2); 
+        free($2); 
+    }
     ;
 
 array_decl:
-    type IDENTIFIER LBRACKET INT_VAL RBRACKET { $$ = create_array_decl($1, $2, create_int_const($4)); free($2); }
+    type IDENTIFIER LBRACKET INT_VAL RBRACKET { 
+        DataType t = TYPE_UNKNOWN;
+        if(strcmp($1, "int")==0) t = TYPE_INT;
+        else if(strcmp($1, "float")==0) t = TYPE_FLOAT;
+        else if(strcmp($1, "bool")==0) t = TYPE_BOOL;
+        insert_symbol($2, t, line_num);
+        $$ = create_array_decl($1, $2, create_int_const($4)); 
+        free($2); 
+    }
     ;
 
 assign_stmt:
     IDENTIFIER ASSIGN expr { 
+        Symbol* sym = lookup_symbol($1);
+        if (!sym) {
+            fprintf(stderr, "Semantic Error at line %d: Variable '%s' not declared or out of scope\n", line_num, $1);
+        } else {
+            check_type(sym->type, get_type($3), line_num);
+        }
         $$ = create_assign(create_identifier($1), $3); 
         free($1); 
     }
     | IDENTIFIER LBRACKET expr RBRACKET ASSIGN expr { 
+        Symbol* sym = lookup_symbol($1);
+        if (!sym) {
+            fprintf(stderr, "Semantic Error at line %d: Array '%s' not declared or out of scope\n", line_num, $1);
+        } else {
+            check_type(sym->type, get_type($6), line_num);
+        }
         $$ = create_assign(create_array_access($1, $3), $6); 
         free($1); 
     }
@@ -150,7 +180,19 @@ default_stmt:
     ;
 
 func_decl:
-    type IDENTIFIER LPAREN param_list RPAREN block { $$ = create_function($1, $2, $4, $6); free($2); }
+    type IDENTIFIER LPAREN { 
+        DataType t = TYPE_UNKNOWN;
+        if(strcmp($1, "int")==0) t = TYPE_INT;
+        else if(strcmp($1, "float")==0) t = TYPE_FLOAT;
+        else if(strcmp($1, "bool")==0) t = TYPE_BOOL;
+        insert_symbol($2, t, line_num);
+        enter_scope(); 
+    } param_list RPAREN block { 
+        // Note: param_list shifted to $5 and block to $7 due to mid-rule action
+        $$ = create_function($1, $2, $5, $7); 
+        free($2); 
+        exit_scope();
+    }
     ;
 
 param_list:
@@ -160,11 +202,26 @@ param_list:
     ;
 
 param:
-    type IDENTIFIER { $$ = create_var_decl($1, $2); free($2); }
+    type IDENTIFIER { 
+        DataType t = TYPE_UNKNOWN;
+        if(strcmp($1, "int")==0) t = TYPE_INT;
+        else if(strcmp($1, "float")==0) t = TYPE_FLOAT;
+        else if(strcmp($1, "bool")==0) t = TYPE_BOOL;
+        insert_symbol($2, t, line_num);
+        $$ = create_var_decl($1, $2); 
+        free($2); 
+    }
     ;
 
 func_call:
-    IDENTIFIER LPAREN arg_list RPAREN { $$ = create_function_call($1, $3); free($1); }
+    IDENTIFIER LPAREN arg_list RPAREN { 
+        Symbol* sym = lookup_symbol($1);
+        if (!sym) {
+            fprintf(stderr, "Semantic Error at line %d: Function '%s' not declared\n", line_num, $1);
+        }
+        $$ = create_function_call($1, $3); 
+        free($1); 
+    }
     ;
 
 arg_list:
@@ -198,8 +255,20 @@ expr:
     
     | LPAREN expr RPAREN    { $$ = $2; }
     
-    | IDENTIFIER            { $$ = create_identifier($1); free($1); }
-    | IDENTIFIER LBRACKET expr RBRACKET { $$ = create_array_access($1, $3); free($1); }
+    | IDENTIFIER            { 
+        Symbol* sym = lookup_symbol($1);
+        if (!sym) {
+            fprintf(stderr, "Semantic Error at line %d: Variable '%s' not declared or out of scope\n", line_num, $1);
+        }
+        $$ = create_identifier($1); free($1); 
+    }
+    | IDENTIFIER LBRACKET expr RBRACKET { 
+        Symbol* sym = lookup_symbol($1);
+        if (!sym) {
+            fprintf(stderr, "Semantic Error at line %d: Array '%s' not declared or out of scope\n", line_num, $1);
+        }
+        $$ = create_array_access($1, $3); free($1); 
+    }
     
     | INT_VAL               { $$ = create_int_const($1); }
     | FLOAT_VAL             { $$ = create_float_const($1); }
