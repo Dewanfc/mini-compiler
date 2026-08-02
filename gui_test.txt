@@ -1,7 +1,9 @@
-{
-float position;
-float initial=1;
-float rate = 2.0;
+int sum(int a, int b) {
+    return a + b;
+}
 
-position = initial + rate *60;
+int main() {
+    int x;
+    x = 10 + 20;
+    print sum(x, 5);
 }
