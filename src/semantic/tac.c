@@ -12,6 +12,7 @@ char* new_temp() {
     return temp;
 }
 
+
 char* new_label() {
     char* label = (char*)malloc(16);
     sprintf(label, "L%d", label_count++);
