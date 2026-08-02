@@ -114,7 +114,7 @@ char* generate_tac(ASTNode* node) {
             free(L1);
             free(L2);
             free(L3);
-            return NULL;
+            
         }
 
         case NODE_WHILE: {
